@@ -13,7 +13,15 @@ app.use(bodyParser.json());
 app.use(methodOverride()); // TODO: what does this do?
 app.use(morgan('dev', { format: 'dev', immediate: true }));
 app.use(router());
- 
-http.createServer(app).listen(9999, function() {
-    console.log('Server up: http://localhost:' + 9999);
+
+var mongoload = require('./server/mongoload');
+mongoload.load(function (err) {
+    if (err) {
+        console.log('error loading data into mongo');
+        return;
+    }
+    http.createServer(app).listen(9999, function() {
+        console.log('Server up: http://localhost:' + 9999);
+    });
 });
+ 
